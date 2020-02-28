@@ -1,0 +1,61 @@
+﻿using System;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Json;
+using System.Net.Http;
+
+namespace StockData
+{
+    public class StockData
+    {
+        public static void Main(string[] args)
+        {
+            StockRealTimePrice friend = GetStockRealTimePrice();
+            Console.WriteLine("Stock:APPL");
+            Console.WriteLine(friend.price);
+            Console.ReadLine();
+        }
+        public static StockRealTimePrice GetStockRealTimePrice()
+        {
+            HttpClient client = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(
+                HttpMethod.Get,
+                string.Format("https://financialmodelingprep.com/api/v3/stock/real-time-price/AAPL"));
+
+            HttpResponseMessage response = client.SendAsync(request).Result;
+
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(StockRealTimePrice));
+
+            if (!response.IsSuccessStatusCode)
+            {
+                //StockRealTimePrice friend = (StockRealTimePrice)serializer.ReadObject(response.Content.ReadAsStreamAsync().Result);
+                
+                return new StockRealTimePrice();
+
+            }
+
+            return (StockRealTimePrice)serializer.ReadObject(response.Content.ReadAsStreamAsync().Result);
+        }
+
+        // return (StockRealTimePrice)serializer.ReadObject(response.Content.ReadAsStreamAsync().Result);
+    }
+
+
+    [DataContract]
+    public class StockRealTimePrice
+    {
+        [DataMember]
+        public string symbol;
+
+        [DataMember]
+        public double price;
+    }
+
+}
+
+
+
+
+
+//while true then call function 

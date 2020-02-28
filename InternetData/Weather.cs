@@ -150,8 +150,9 @@ namespace InternetData
         [DataMember]
         public double cloudCover;
 
-        [DataMember]
-        public double uvIndex;
+        //[DataMember]
+        //public double uvIndex; //don't have to access all the data that's given
+                                 //only use data that's relevant to me
 
         [DataMember]
         public double visibility;
